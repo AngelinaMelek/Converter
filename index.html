@@ -7,13 +7,32 @@
     <title>Document</title>
 </head>
 <body>
-       <script>
- 
-function convertFiles(input) {
+    <script>
 
-};
+    function convertFiles(input) {
+        const incomeArr = input.split(/\r?\n/);
+        const splited = incomeArr.map((item) => item.replaceAll(' ', '').split("="))
+        const convertToObj = Object.fromEntries(splited)
+     
+        return console.log(transformObj(convertToObj))
+    };    
 
-convertFiles("afizz = 3\nbuzz.one = item1\nbuzz.one = item2\nbuzz.one.two = 123\nfizzbuzz.root.a.b.c = 13")
+    const transformObj = (obj) => {
+        return Object.keys(obj).reduce((acc, key) => {
+            if(key.indexOf(".") >= 0) {
+                const [parentKey, childKey] = key.split(".");
+                acc[parentKey] = acc[parentKey] || {};
+                acc[parentKey][childKey] = obj[key];
+            }
+            else {
+                acc[key] = obj[key];
+            }
+            return acc;
+        }, {});
+    }
+
+    convertFiles("afizz = 3\nbuzz.one = item1\nbuzz.one = item2\nbuzz.one.two = 123\nfizzbuzz.root.a.b.c = 13")
+   
    </script> 
 </body>
 </html>
